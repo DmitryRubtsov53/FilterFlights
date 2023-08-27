@@ -1,11 +1,11 @@
-package model;
+package com.gridnine.testing.model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
- * Bean that represents a flight segment. Бин, представляющий сигмент.
+ * Bean that represents a flight segment. Бин, представляющий сегмент.
  */
 public class Segment {
     private final LocalDateTime departureDate; // Дата и время вылета.
@@ -17,11 +17,11 @@ public class Segment {
         arrivalDate = Objects.requireNonNull(arr);
     }
 
-    LocalDateTime getDepartureDate() {
+    public LocalDateTime getDepartureDate() {
         return departureDate;
     }
 
-    LocalDateTime getArrivalDate() {
+    public LocalDateTime getArrivalDate() {
         return arrivalDate;
     }
 

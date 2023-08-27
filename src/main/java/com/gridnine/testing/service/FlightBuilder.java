@@ -1,7 +1,7 @@
-package service;
+package com.gridnine.testing.service;
 
-import model.Flight;
-import model.Segment;
+import com.gridnine.testing.model.Flight;
+import com.gridnine.testing.model.Segment;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ import java.util.List;
 /**
  * Factory class to get sample list of flights. Фабричный класс для получения примерного списка рейсов.
  */
-class FlightBuilder {
-    static List<Flight> createFlights() {
+public class FlightBuilder {
+    public static List<Flight> createFlights() {
         LocalDateTime threeDaysFromNow = LocalDateTime.now().plusDays(3);
         return Arrays.asList(
 

@@ -1,4 +1,4 @@
-package model;
+package com.gridnine.testing.model;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,13 +13,13 @@ public class Flight {
         segments = segs;
     }
 
-    List<Segment> getSegments() {
+    public List<Segment> getSegments() {
         return segments;
     }
 
     @Override
     public String toString() {
         return segments.stream().map(Object::toString)
-                .collect(Collectors.joining(" "));                  // ???
+                .collect(Collectors.joining(" "));
     }
 }
