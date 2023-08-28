@@ -16,9 +16,11 @@ public class FlightExceptionService {
      */
     public static List<Flight> arrivalTimeBeforeDepartureDate (List<Flight> flights) {
         List<Flight> exFlights = new ArrayList<>();
+        if (flights.isEmpty()) {
+            throw new IllegalArgumentException("Данные для обработки не предоставлены.");
+        }
         for (Flight e : flights) {
-            List<Segment> segments = e.getSegments();
-            for (Segment s : segments) {
+            for (Segment s : e.getSegments()) {
                 if (s.getArrivalDate().compareTo(s.getDepartureDate()) < 0) {
                     exFlights.add(e);
                 }
@@ -31,9 +33,11 @@ public class FlightExceptionService {
      */
     public static List<Flight> departureBeforeCurrentTime(List<Flight> flights) {
         List<Flight> exFlights = new ArrayList<>();
+        if (flights.isEmpty()) {
+            throw new IllegalArgumentException("Данные для обработки не предоставлены.");
+        }
         for (Flight e : flights) {
-            List<Segment> segments = e.getSegments();
-            for (Segment s : segments) {
+            for (Segment s : e.getSegments()) {
                 if (s.getDepartureDate().compareTo(LocalDateTime.now()) < 0) {
                     exFlights.add(e);
                 }
@@ -45,6 +49,9 @@ public class FlightExceptionService {
      * Определение списка исключений из перелётов, если время ожидания на земле больше заданного.
      */
     public static List<Flight> moreWaitingTimeOnTheGround (List<Flight> flights) {
+        if (flights.isEmpty()) {
+            throw new IllegalArgumentException("Данные не предоставлены или не корректны.");
+        }
         while (true) {
             try {
                 List<Flight> exFlights = new ArrayList<>();
@@ -67,7 +74,7 @@ public class FlightExceptionService {
                 if (hours >= 0)
                     return exFlights;
             } catch (Exception e) {
-                throw new IllegalArgumentException ();
+                throw new RuntimeException();
             }
         }
     }
@@ -75,6 +82,9 @@ public class FlightExceptionService {
      *  Определение списка перелётов, соответствующих правилу.
      */
     public static List<Flight> flightsThatComplyWithTheRule (List<Flight> flights, List<Flight> exFlights) {
+        if (flights.isEmpty() || exFlights.isEmpty()) {
+            throw new IllegalArgumentException("Данные для обработки не предоставлены.");
+        }
         return flights.stream().filter(e -> !exFlights.contains(e)).toList();
     }
 

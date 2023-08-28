@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static com.gridnine.testing.service.FlightExceptionService.*;
+
 public class Main {
     static List<Flight> flights = FlightBuilder.createFlights();
     static List<Flight> exFlights = new ArrayList<>();
@@ -29,22 +31,22 @@ public class Main {
                     int menu = scanner.nextInt();
                     switch (menu) {
                         case 1:
-                            exFlights = FlightExceptionService.arrivalTimeBeforeDepartureDate(flights);
+                            exFlights = arrivalTimeBeforeDepartureDate(flights);
                             System.out.println("Список исключенных перелётов по правилу 1:" + "\n" + exFlights);
                             System.out.println("Список перелётов, соответствующих правилу 1:" + "\n" +
-                                    FlightExceptionService.flightsThatComplyWithTheRule(flights,exFlights));
+                                    flightsThatComplyWithTheRule(flights,exFlights));
                             break;
                         case 2:
-                            exFlights = FlightExceptionService.departureBeforeCurrentTime(flights);
+                            exFlights = departureBeforeCurrentTime(flights);
                             System.out.println("Список исключенных перелётов по правилу 2:" + "\n" + exFlights);
                             System.out.println("Список перелётов, соответствующих правилу 2:" + "\n" +
-                                    FlightExceptionService.flightsThatComplyWithTheRule(flights,exFlights));
+                                    flightsThatComplyWithTheRule(flights,exFlights));
                             break;
                         case 3:
-                            exFlights = FlightExceptionService.moreWaitingTimeOnTheGround(flights);
+                            exFlights = moreWaitingTimeOnTheGround(flights);
                             System.out.println("Список исключенных перелётов по правилу 3:" + "\n" + exFlights);
                             System.out.println("Список перелётов, соответствующих правилу 3:" + "\n" +
-                                    FlightExceptionService.flightsThatComplyWithTheRule(flights,exFlights));
+                                    flightsThatComplyWithTheRule(flights,exFlights));
                             break;
                         case 0:
                             scanner.close();
@@ -52,7 +54,7 @@ public class Main {
                     }
                 } else {
                     scanner.next();
-                    System.out.println("Выберите правило фильтрации и введите № пункта меню: ");
+                    System.out.println("Выберите правило фильтрации и введите № пункта МЕНЮ: ");
                 }
             }
         }
