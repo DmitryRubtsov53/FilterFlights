@@ -24,6 +24,15 @@ public class FlightExceptionServiceTest {
         assertThat(actualMessage.equals(expectedMessage));
     }
     @Test
+    public void whenСomparingАrrivalАndDepartureTimes() {
+        Segment s = new Segment(LocalDateTime.parse("2023-08-31T19:05"),
+                LocalDateTime.parse("2023-08-31T18:05"));
+        List<Flight> flights = Arrays.asList(new Flight(Arrays.asList(s)));
+        List<Flight> expected = new ArrayList<>();
+        List<Flight> actual = arrivalTimeBeforeDepartureDate (flights);
+        assertThat(actual.equals(expected));
+    }
+    @Test
     public void whenCheckDepartureBeforeCurrentTimeButFlightsIsEmptyThrowsException() {
         List<Flight> flights = new ArrayList<>();
         Exception exception = assertThrows(IllegalArgumentException.class,
@@ -31,6 +40,15 @@ public class FlightExceptionServiceTest {
         String expectedMessage = "Данные для обработки не предоставлены.";
         String actualMessage = exception.getMessage();
         assertThat(actualMessage.equals(expectedMessage));
+    }
+    @Test
+    public void whenCheckDepartureBeforeCurrentTime() {
+        Segment s = new Segment(LocalDateTime.parse("2023-08-31T19:05"),
+                LocalDateTime.parse("2023-08-31T18:05"));
+        List<Flight> flights = Arrays.asList(new Flight(Arrays.asList(s)));
+        List<Flight> expected = new ArrayList<>();
+        List<Flight> actual = departureBeforeCurrentTime(flights);
+        assertThat(actual.equals(expected));
     }
     @Test
     public void whenMoreWaitingTimeOnTheGroundButFlightsIsEmptyThrowsException() {
