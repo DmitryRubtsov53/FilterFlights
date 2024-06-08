@@ -19,7 +19,7 @@ public class FlightBuilder {
                 //A normal flight with two hour duration / Обычный полет продолжительностью два часа
                 createFlight(threeDaysFromNow, threeDaysFromNow.plusHours(2)),
 
-                //A normal multi segment flight / Обычный многосегментный рейс
+                //A normal multi segment flight / Обычный рейс с несколькими сегментами
                 createFlight(threeDaysFromNow, threeDaysFromNow.plusHours(2),
                         threeDaysFromNow.plusHours(3), threeDaysFromNow.plusHours(5)),
 

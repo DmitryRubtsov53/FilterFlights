@@ -16,8 +16,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("МОДУЛЬ ФИЛЬТРАЦИИ ПЕРЕЛЁТОВ." + "\n"
-                + "__________________________________________________________________________________" + "\n");
+        System.out.println("""
+                МОДУЛЬ ФИЛЬТРАЦИИ ПЕРЕЛЁТОВ.
+                __________________________________________________________________________________
+                """);
         System.out.println("Тестовый набор перелётов:");
         System.out.println(flights);
         System.out.println("__________________________________________________________________________________" + "\n");
@@ -49,7 +51,6 @@ public class Main {
                                     flightsThatComplyWithTheRule(flights,exFlights));
                             break;
                         case 0:
-                            scanner.close();
                             break label;
                     }
                 } else {

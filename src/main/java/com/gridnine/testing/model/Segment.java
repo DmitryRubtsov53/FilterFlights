@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * Bean that represents a flight segment. Бин, представляющий сегмент.
  */
-public class Segment {
+public class Segment implements Cloneable{
     private final LocalDateTime departureDate; // Дата и время вылета.
 
     private final LocalDateTime arrivalDate;   // Дата и время прилета.
@@ -23,6 +23,19 @@ public class Segment {
 
     public LocalDateTime getArrivalDate() {
         return arrivalDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Segment segment = (Segment) o;
+        return Objects.equals(departureDate, segment.departureDate) && Objects.equals(arrivalDate, segment.arrivalDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(departureDate, arrivalDate);
     }
 
     @Override

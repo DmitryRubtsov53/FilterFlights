@@ -1,6 +1,8 @@
 
 import com.gridnine.testing.model.Flight;
 import com.gridnine.testing.model.Segment;
+import com.gridnine.testing.service.FlightExceptionService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -10,75 +12,76 @@ import java.util.List;
 
 import static com.gridnine.testing.service.FlightExceptionService.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FlightExceptionServiceTest {
 
     @Test
-    public void whenСomparingАrrivalАndDepartureTimesButFlightsIsNullThrowsException() {
+    @DisplayName("Т1/МC №1-4. Когда лист перелётов пуст, выбрасывается исключение.")
+    void whenTheFlightListIsEmptyThenExceptionIsThrown() {
         List<Flight> flights = new ArrayList<>();
-        Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> arrivalTimeBeforeDepartureDate (flights));
-        String expectedMessage = "Данные для обработки не предоставлены.";
-        String actualMessage = exception.getMessage();
-        assertThat(actualMessage.equals(expectedMessage));
+        assertThrows(IllegalArgumentException.class, () -> FlightExceptionService
+                .arrivalTimeBeforeDepartureDate(flights));
+        assertThrows(IllegalArgumentException.class, () -> FlightExceptionService
+                .departureBeforeCurrentTime(flights));
+        assertThrows(IllegalArgumentException.class, () -> FlightExceptionService
+                .moreWaitingTimeOnTheGround(flights));
+        assertThrows(IllegalArgumentException.class, () -> FlightExceptionService
+                .flightsThatComplyWithTheRule(flights, null));
     }
+
     @Test
-    public void whenСomparingАrrivalАndDepartureTimes() {
-        Segment s = new Segment(LocalDateTime.parse("2023-08-31T19:05"),
-                LocalDateTime.parse("2023-08-31T18:05"));
-        List<Flight> flights = Arrays.asList(new Flight(Arrays.asList(s)));
-        List<Flight> expected = new ArrayList<>();
+    @DisplayName("Т2/MC №1. Сегмент с не валидным временем (вылет > прилёта) попадает в лист исключений.")
+    public void whenTimeIsNotValidThenSegmentIsAddedToExceptions() {
+        Segment s = new Segment(LocalDateTime.parse("2024-06-09T19:05"),
+                LocalDateTime.parse("2024-06-09T18:05"));
+        List<Flight> flights = List.of(new Flight(List.of(s)));
         List<Flight> actual = arrivalTimeBeforeDepartureDate (flights);
-        assertThat(actual.equals(expected));
+        assertEquals(1, actual.size());
     }
     @Test
-    public void whenCheckDepartureBeforeCurrentTimeButFlightsIsEmptyThrowsException() {
-        List<Flight> flights = new ArrayList<>();
-        Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> departureBeforeCurrentTime(flights));
-        String expectedMessage = "Данные для обработки не предоставлены.";
-        String actualMessage = exception.getMessage();
-        assertThat(actualMessage.equals(expectedMessage));
+    @DisplayName("Т3/MC №1. При добавлении сегмента с валидным временем (вылет < прилёта) лист исключений пуст.")
+    public void whenTimeIsValidThenSegmentIsNotAddedToExceptions() {
+        Segment s = new Segment(LocalDateTime.parse("2024-06-09T18:05"),
+                LocalDateTime.parse("2024-06-09T19:05"));
+        List<Flight> flights = List.of(new Flight(List.of(s)));
+        List<Flight> actual = arrivalTimeBeforeDepartureDate (flights);
+        assertTrue(actual.isEmpty());
     }
     @Test
-    public void whenCheckDepartureBeforeCurrentTime() {
-        Segment s = new Segment(LocalDateTime.parse("2023-08-31T19:05"),
-                LocalDateTime.parse("2023-08-31T18:05"));
-        List<Flight> flights = Arrays.asList(new Flight(Arrays.asList(s)));
-        List<Flight> expected = new ArrayList<>();
+    @DisplayName("Т2/MC №2. Когда вылет до текущего времени, сегмент добавляют в лист исключений.")
+    public void whenCheckDepartureIsBeforeCurrentTime() {
+        Segment s = new Segment(LocalDateTime.parse("2024-06-07T17:05"),
+                LocalDateTime.parse("2024-06-07T18:05"));
+        List<Flight> flights = List.of(new Flight(List.of(s)));
+        String expected = List.of(new Flight(List.of(s))).toString();
+        String actual = departureBeforeCurrentTime(flights).toString();
+        assertEquals(expected,actual);
+    }
+    @Test
+    @DisplayName("Т3/MC №2. Когда вылет сегмента после текущего времени, лист исключений пуст.")
+    public void whenCheckDepartureIsAfterCurrentTime() {
+        Segment s = new Segment(LocalDateTime.parse("2025-06-20T17:05"),
+                LocalDateTime.parse("2025-06-20T18:05"));
+        List<Flight> flights = List.of(new Flight(List.of(s)));
         List<Flight> actual = departureBeforeCurrentTime(flights);
-        assertThat(actual.equals(expected));
+        assertTrue(actual.isEmpty());
     }
+
+
     @Test
-    public void whenMoreWaitingTimeOnTheGroundButFlightsIsEmptyThrowsException() {
-        List<Flight> flights = new ArrayList<>();
-        Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> moreWaitingTimeOnTheGround(flights));
-        String expectedMessage = "Данные не предоставлены или не корректны.";
-        String actualMessage = exception.getMessage();
-        assertThat(actualMessage.equals(expectedMessage));
-    }
-    @Test
-    public void whenFlightsThatComplyWithTheRuleButFlightsIsEmptyThrowsException() {
-        List<Flight> flights = new ArrayList<>(); List<Flight> exFlights = new ArrayList<>();
-        Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> flightsThatComplyWithTheRule (flights, exFlights));
-        String expectedMessage = "Данные не предоставлены или не корректны.";
-        String actualMessage = exception.getMessage();
-        assertThat(actualMessage.equals(expectedMessage));
-    }
-    @Test
+    @DisplayName("Т2/MC №4. Когда перелёт соответствует правилу, его добавляют в лист предложений.")
     public void whenFlightsThatComplyWithTheRule() {
         Segment s1 = new Segment(LocalDateTime.parse("2023-08-31T16:05"),
                 LocalDateTime.parse("2023-08-31T18:05"));
         Segment s2 = new Segment(LocalDateTime.parse("2023-08-31T19:05"),
                 LocalDateTime.parse("2023-08-31T20:05"));
-        List<Flight> flights = Arrays.asList(new Flight(Arrays.asList(s1, s2)));
-        List<Flight> exFlights = Arrays.asList(new Flight(Arrays.asList(s1)));
-        List<Flight> expected = Arrays.asList(new Flight(Arrays.asList(s2)));
+        List<Flight> flights = List.of(new Flight(List.of(s1, s2)));
+        List<Flight> exFlights = List.of(new Flight(List.of(s1)));
+        List<Flight> expected = List.of(new Flight(List.of(s2)));
         List<Flight> actual = flightsThatComplyWithTheRule (flights, exFlights);
         assertThat(actual.equals(expected));
+
     }
 
 }
