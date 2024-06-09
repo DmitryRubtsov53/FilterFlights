@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * Bean that represents a flight segment. Бин, представляющий сегмент.
  */
-public class Segment implements Cloneable{
+public class Segment {
     private final LocalDateTime departureDate; // Дата и время вылета.
 
     private final LocalDateTime arrivalDate;   // Дата и время прилета.

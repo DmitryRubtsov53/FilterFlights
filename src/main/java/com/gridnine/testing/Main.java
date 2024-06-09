@@ -33,15 +33,15 @@ public class Main {
                     int menu = scanner.nextInt();
                     switch (menu) {
                         case 1:
-                            exFlights = arrivalTimeBeforeDepartureDate(flights);
-                            System.out.println("Список исключенных перелётов по правилу 1:" + "\n" + exFlights);
-                            System.out.println("Список перелётов, соответствующих правилу 1:" + "\n" +
-                                    flightsThatComplyWithTheRule(flights,exFlights));
-                            break;
-                        case 2:
                             exFlights = departureBeforeCurrentTime(flights);
                             System.out.println("Список исключенных перелётов по правилу 2:" + "\n" + exFlights);
                             System.out.println("Список перелётов, соответствующих правилу 2:" + "\n" +
+                                    flightsThatComplyWithTheRule(flights,exFlights));
+                            break;
+                        case 2:
+                            exFlights = arrivalTimeBeforeDepartureDate(flights);
+                            System.out.println("Список исключенных перелётов по правилу 1:" + "\n" + exFlights);
+                            System.out.println("Список перелётов, соответствующих правилу 1:" + "\n" +
                                     flightsThatComplyWithTheRule(flights,exFlights));
                             break;
                         case 3:
